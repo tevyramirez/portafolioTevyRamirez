@@ -11,21 +11,8 @@ export const metadata: Metadata = {
   title: 'Sebastián Ramírez | Desarrollador Fullstack',
   description: 'Desarrollador Fullstack con experiencia en Vue 3, React, TypeScript, Node.js, Python y Docker. Desarrollo de software a medida y plataformas SaaS en producción.',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/icon.svg',
+    apple: '/icon.svg',
   },
 }
 
