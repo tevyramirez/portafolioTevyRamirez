@@ -43,10 +43,10 @@ export function Header() {
     <motion.header
       initial={{ y: -10, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ 
-        duration: duration.slow, 
+      transition={{
+        duration: duration.slow,
         delay: 0.1,
-        ease: ease.out 
+        ease: ease.out
       }}
       style={{
         backgroundColor: `oklch(0.13 0.01 240 / ${scrollProgress * 0.9})`,
@@ -59,7 +59,7 @@ export function Header() {
         "max-w-5xl mx-auto px-6 flex items-center justify-between transition-all",
         scrollProgress > 0.5 ? "py-3" : "py-4"
       )}
-      style={{ transitionDuration: '300ms', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+        style={{ transitionDuration: '300ms', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
       >
         {/* Logo */}
         <Link
@@ -91,7 +91,7 @@ export function Header() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
-                      transition={{ 
+                      transition={{
                         type: "spring",
                         ...spring.snappy
                       }}
@@ -106,7 +106,7 @@ export function Header() {
         {/* Social Links */}
         <div className="flex items-center gap-4">
           <Link
-            href="https://github.com/sramirezdev"
+            href="https://github.com/tevyramirez"
             target="_blank"
             rel="noopener noreferrer"
             className="text-muted-foreground transition-colors duration-200 hover:text-foreground"
@@ -121,7 +121,7 @@ export function Header() {
             </svg>
           </Link>
           <Link
-            href="https://linkedin.com/in/sramirezdev"
+            href="https://www.linkedin.com/in/sebastian-ramirez-ramirez-b831b0244/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-muted-foreground transition-colors duration-200 hover:text-foreground"
