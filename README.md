@@ -1,42 +1,63 @@
-# Sebastián Ramírez
-**Fullstack Developer**
+# 🌐 Portafolio Personal - Sebastián "Tevy" Ramírez
 
-Portafolio personal diseñado con un enfoque en rendimiento, arquitectura limpia y experiencia de usuario minimalista.
+Portafolio web personal con animaciones 3D interactivas, diseñado para mostrar mis proyectos y habilidades como Fullstack Developer.
 
-## Arquitectura
+## 🚀 Tecnologías
 
-El proyecto utiliza un stack moderno optimizado para mantenibilidad y performance:
+- **Framework:** Next.js 15 (App Router)
+- **UI:** React 19
+- **Estilos:** Tailwind CSS 4
+- **Animaciones:** Framer Motion
+- **3D:** React Three Fiber + Three.js + Drei
+- **Mobile:** Expo (React Native)
+- **Lenguaje:** TypeScript
 
-### Core Técnica
-*   **Next.js 15 (App Router)**: Renderizado híbrido y optimización de rutas.
-*   **TypeScript**: Tipado estático estricto en todo el proyecto.
-*   **React 19**: Gestión de estado y concurrencia.
+## ✨ Características
 
-### Interfaz & Estilos
-*   **Tailwind CSS 4**: Sistema de diseño mediante utilidades y variables CSS nativas.
-*   **Framer Motion**: Gestión de animaciones y transiciones de estado.
-*   **React Three Fiber**: Implementación de Three.js para el sistema de partículas en segundo plano.
+- 🎨 Diseño moderno y minimalista
+- 🌟 Animaciones fluidas con Framer Motion
+- 🎮 Sistema de partículas 3D interactivo con Three.js
+- 📱 Versión mobile con Expo
+- 🌓 Modo oscuro/claro
+- ⚡ Optimizado para performance
+- 🎯 SEO friendly
 
-## Estructura del Proyecto
+## 🛠️ Desarrollo Local
 
-Organización principal del código fuente:
+```bash
+# Instalar dependencias
+npm install
 
-```text
-.
-├── app/          # Rutas, layouts y páginas (Next.js App Router)
-├── components/   # Componentes de UI reutilizables
-├── lib/          # Utilidades, constantes y configuraciones
-└── public/       # Recursos estáticos
+# Iniciar servidor de desarrollo
+npm run dev
+
+# Construir para producción
+npm run build
+
+# Preview del build
+npm run preview
 ```
 
-## Desarrollo Local
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-1.  Instalar dependencias:
-    ```bash
-    npm install
-    ```
+## 📦 Estructura del Proyecto
 
-2.  Iniciar servidor de desarrollo:
-    ```bash
-    npm run dev
-    ```
+```
+.
+├── app/              # Rutas y páginas (Next.js App Router)
+├── components/       # Componentes UI reutilizables
+├── lib/              # Utilidades y configuraciones
+└── public/           # Recursos estáticos
+```
+
+## 🌐 Demo en Vivo
+
+🔗 [https://portafolio-tevy-ramirez.vercel.app/](https://portafolio-tevy-ramirez.vercel.app/)
+
+## 📄 Licencia
+
+Este proyecto es privado.
+
+---
+
+Desarrollado con ❤️ por Sebastián "Tevy" Ramírez
