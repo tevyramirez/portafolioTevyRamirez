@@ -36,4 +36,4 @@ conductor/
 docs/
 skills-lock.json
 design-state.md
-data/
+data/*.json
