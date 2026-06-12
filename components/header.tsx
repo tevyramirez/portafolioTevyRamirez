@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
@@ -9,6 +9,7 @@ import { duration, ease, spring } from "@/lib/motion"
 const navItems = [
   { name: "Sobre mí", href: "#about" },
   { name: "Proyectos", href: "#projects" },
+  { name: "Augmented", href: "#augmented" },
   { name: "Stack", href: "#stack" },
   { name: "Contacto", href: "#contact" },
 ]
@@ -16,27 +17,45 @@ const navItems = [
 export function Header() {
   const [activeSection, setActiveSection] = useState("")
   const [scrollProgress, setScrollProgress] = useState(0)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      // Smooth progress 0-1 over first 100px
-      setScrollProgress(Math.min(scrollY / 100, 1))
-
-      const sections = navItems.map((item) => item.href.slice(1))
-      const current = sections.find((section) => {
-        const element = document.getElementById(section)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          return rect.top <= 100 && rect.bottom >= 100
-        }
-        return false
-      })
-      if (current) setActiveSection(current)
+      setScrollProgress(Math.min(window.scrollY / 100, 1))
     }
-
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
+
+  useEffect(() => {
+    const observers: IntersectionObserver[] = []
+    const sections = navItems.map((item) => item.href.slice(1))
+
+    sections.forEach((section) => {
+      const element = document.getElementById(section)
+      if (element) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                setActiveSection(section)
+              }
+            })
+          },
+          { rootMargin: "-50% 0px -50% 0px" }
+        )
+        observer.observe(element)
+        observers.push(observer)
+      }
+    })
+
+    return () => {
+      observers.forEach((observer) => observer.disconnect())
+    }
+  }, [])
+
+  const closeMobileMenu = useCallback(() => {
+    setMobileMenuOpen(false)
   }, [])
 
   return (
@@ -49,9 +68,9 @@ export function Header() {
         ease: ease.out
       }}
       style={{
-        backgroundColor: `oklch(0.13 0.01 240 / ${scrollProgress * 0.9})`,
+        backgroundColor: `oklch(10% 0.02 160 / ${scrollProgress * 0.9})`,
         backdropFilter: `blur(${scrollProgress * 16}px)`,
-        borderBottomColor: `oklch(0.25 0.01 240 / ${scrollProgress * 0.5})`,
+        borderBottomColor: `oklch(30% 0.1 155 / ${scrollProgress * 0.5})`,
       }}
       className="fixed top-0 left-0 right-0 z-50 border-b border-transparent"
     >
@@ -60,8 +79,8 @@ export function Header() {
         scrollProgress > 0.5 ? "py-3" : "py-4"
       )}
         style={{ transitionDuration: '300ms', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
+        aria-label="Navegación principal"
       >
-        {/* Logo */}
         <Link
           href="/"
           className="text-foreground font-medium text-lg tracking-tight transition-colors duration-200 hover:text-primary"
@@ -69,8 +88,7 @@ export function Header() {
           SR
         </Link>
 
-        {/* Navigation */}
-        <ul className="hidden md:flex items-center gap-8">
+        <ul className="hidden md:flex items-center gap-8" role="list">
           {navItems.map((item) => (
             <li key={item.name}>
               <Link
@@ -81,6 +99,7 @@ export function Header() {
                     ? "text-primary"
                     : "text-muted-foreground hover:text-foreground"
                 )}
+                aria-current={activeSection === item.href.slice(1) ? "page" : undefined}
               >
                 {item.name}
                 <AnimatePresence>
@@ -103,7 +122,6 @@ export function Header() {
           ))}
         </ul>
 
-        {/* Social Links */}
         <div className="flex items-center gap-4">
           <Link
             href="https://github.com/tevyramirez"
@@ -131,8 +149,54 @@ export function Header() {
               <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
             </svg>
           </Link>
+
+          <button
+            className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            aria-expanded={mobileMenuOpen}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
       </nav>
+
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-border/20 bg-background/95 backdrop-blur-md"
+          >
+            <ul className="flex flex-col py-4 px-6 gap-1" role="list">
+              {navItems.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    onClick={closeMobileMenu}
+                    className={cn(
+                      "block py-2 px-3 rounded-lg text-sm font-medium transition-colors",
+                      activeSection === item.href.slice(1)
+                        ? "text-primary bg-primary/10"
+                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                    )}
+                    aria-current={activeSection === item.href.slice(1) ? "page" : undefined}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.header>
   )
 }
