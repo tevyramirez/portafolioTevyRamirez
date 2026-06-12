@@ -45,7 +45,7 @@ export function Contact() {
             viewport={viewport}
             transition={{ duration: duration.slow, delay: 0.1, ease: ease.out }}
           />
-          <span className="text-primary font-mono text-sm">04.</span>
+          <span className="text-primary font-mono text-sm">05.</span>
           <motion.div
             className="flex-1 h-px bg-border/40 max-w-16"
             initial={{ scaleX: 0, originX: 0 }}
@@ -69,16 +69,16 @@ export function Contact() {
 
         {/* Description */}
         <motion.p
-          className="text-muted-foreground text-lg leading-relaxed max-w-xl mx-auto mb-12"
-          initial="hidden"
-          whileInView="visible"
-          viewport={viewport}
-          variants={sectionVariants.content}
-          transition={{ delay: 0.2 }}
+        className="text-muted-foreground text-lg leading-relaxed max-w-xl mx-auto mb-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewport}
+        variants={sectionVariants.content}
+        transition={{ delay: 0.2 }}
         >
-          Disponible para proyectos de desarrollo web, software a medida o
-          posiciones fullstack. Si tienes un desafío técnico interesante,
-          conversemos.
+        ¿Tienes un desafío técnico o una idea que quieras convertir en realidad? 
+        Ya sea que necesites una arquitectura robusta o una web que destaque, 
+        estoy aquí para construirlo contigo. Hablemos.
         </motion.p>
 
         {/* Contact Cards */}

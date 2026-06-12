@@ -1,11 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  typescript: {
-    ignoreBuildErrors: true,
-  },
   images: {
-    unoptimized: true,
+    formats: ['image/webp', 'image/avif'],
+    remotePatterns: [],
   },
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion', '@react-three/drei'],
+  },
+  transpilePackages: ['three'],
 }
 
 export default nextConfig

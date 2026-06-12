@@ -78,7 +78,7 @@ export function Stack() {
           {stackCategories.map((category, categoryIndex) => (
             <motion.div
               key={category.title}
-              className="space-y-6"
+              className="flex flex-col gap-6"
               initial="hidden"
               whileInView="visible"
               viewport={viewport}
@@ -90,7 +90,7 @@ export function Stack() {
               </h3>
 
               <motion.div
-                className="space-y-1"
+                className="flex flex-col gap-1"
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-40px" }}

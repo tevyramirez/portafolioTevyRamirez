@@ -6,29 +6,31 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef } from "react"
 import { heroVariants, badgeVariants, duration, ease } from "@/lib/motion"
 
+const SCROLL_RANGE = [0, 500]
+const WARP_ROTATE_X = [0, 45]
+const WARP_TRANSLATE_Z = [0, -100]
+const WARP_SKEW_X = [0, -10]
+const OPACITY_RANGE = [0, 400]
+
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
-  
-  // Subtle parallax on scroll - barely perceptible
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"]
-  })
-  
-  const contentY = useTransform(scrollYProgress, [0, 1], [0, 40])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+
+  const { scrollY } = useScroll()
+  const rotateX = useTransform(scrollY, SCROLL_RANGE, WARP_ROTATE_X)
+  const translateZ = useTransform(scrollY, SCROLL_RANGE, WARP_TRANSLATE_Z)
+  const skewX = useTransform(scrollY, SCROLL_RANGE, WARP_SKEW_X)
+  const opacity = useTransform(scrollY, OPACITY_RANGE, [1, 0])
 
   return (
     <section 
-      ref={sectionRef}
-      className="min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden"
+      className="min-h-screen flex items-center justify-center px-6 pt-20 overflow-hidden perspective-1000"
     >
       <motion.div 
         className="max-w-3xl mx-auto relative z-10"
-        style={{ y: contentY, opacity: contentOpacity }}
+        style={{ opacity }}
       >
         <motion.div
-          className="space-y-6"
+          className="flex flex-col gap-6"
           initial="hidden"
           animate="visible"
           variants={heroVariants.container}
@@ -41,10 +43,11 @@ export function Hero() {
             Desarrollador Fullstack / Analista Programador
           </motion.p>
 
-          {/* Name - the hero of the page */}
+          {/* Name - the hero of the page - with Cinematic Warp */}
           <motion.h1
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight text-balance tracking-tight"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight text-balance tracking-tight origin-left"
             variants={heroVariants.name}
+            style={{ rotateX, translateZ, skewX }}
           >
             Sebastián Ramírez
           </motion.h1>
