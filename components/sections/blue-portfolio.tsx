@@ -40,13 +40,16 @@ export function BluePortfolio({ onSwitchBack }: BluePortfolioProps) {
             <a href="#contact-clean" className="hover:text-neutral-950 transition-colors">Contacto</a>
           </nav>
           <div className="flex items-center gap-3">
-            {/* Red Pill Switch */}
+            <span className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/20 bg-blue-50 text-blue-600 text-xs font-mono font-semibold">
+              <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+              Blue Pill Mode
+            </span>
             <button
               onClick={onSwitchBack}
               className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-red-500/20 bg-red-50 text-red-600 text-xs font-mono font-semibold transition-all hover:bg-red-500 hover:text-white hover:border-red-500 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]"
             >
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse group-hover:bg-white" />
-              Red Pill Mode
+              <span className="w-2 h-2 rounded-full bg-red-500" />
+              Tomar Roja
             </button>
           </div>
         </div>

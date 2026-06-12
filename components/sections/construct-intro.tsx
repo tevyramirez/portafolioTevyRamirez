@@ -221,7 +221,8 @@ export function ConstructIntro({ onSelect }: ConstructIntroProps) {
       <div className="sr-only">
         <h1>Portafolio interactivo de Sebastián Ramírez - Fullstack Engineer</h1>
         <p>Desarrollador de software a medida, especializado en arquitecturas robustas y escalables con React, Node.js, Python y Docker.</p>
-        <p>Por favor, selecciona una experiencia visual: La Píldora Roja para una experiencia inmersiva estilo Cyberpunk, o la Píldora Azul para un currículum sobrio y corporativo.</p>
+        <p>Simbología: La Píldora Azul representa la ilusión, el conformismo y la comodidad de la ignorancia dentro de la simulación. La Píldora Roja representa la verdad, el despertar y el compromiso con la realidad, por dura que sea.</p>
+        <p>Selecciona una experiencia visual: La Píldora Roja para una experiencia inmersiva estilo Cyberpunk, o la Píldora Azul para un currículum sobrio y corporativo.</p>
       </div>
 
       <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />
@@ -277,7 +278,7 @@ export function ConstructIntro({ onSelect }: ConstructIntroProps) {
               Píldora Azul
             </span>
             <p className="text-[10px] font-mono text-neutral-400 max-w-[150px] leading-relaxed">
-              Regresa a la ilusión estructurada. Portafolio de Élite Corporativa.
+              La ilusión estructurada. Currículum corporativo sobrio, formato de Élite.
             </p>
           </div>
         </button>
@@ -298,7 +299,7 @@ export function ConstructIntro({ onSelect }: ConstructIntroProps) {
               Píldora Roja
             </span>
             <p className="text-[10px] font-mono text-neutral-400 max-w-[150px] leading-relaxed">
-              Despierta en la cruda realidad técnica. Lluvia de datos y WebGL.
+              El despertar. Verdad técnica cruda: lluvia de datos, WebGL, código en vivo.
             </p>
           </div>
         </button>
