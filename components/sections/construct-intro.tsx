@@ -202,6 +202,14 @@ export function ConstructIntro({ onSelect }: ConstructIntroProps) {
     }, 1200)
   }
 
+  useEffect(() => {
+    const t = setTimeout(() => {
+      handleSelection("red-pill")
+    }, 8000)
+    return () => clearTimeout(t)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <motion.section
       initial={{ opacity: 0 }}
@@ -242,7 +250,16 @@ export function ConstructIntro({ onSelect }: ConstructIntroProps) {
       </div>
 
       {/* Interactive Pills */}
-      <div className="relative z-10 flex flex-col sm:flex-row gap-8 sm:gap-16 pb-20 items-center justify-center w-full max-w-2xl px-6">
+      <div className="relative z-10 flex flex-col items-center gap-8 pb-20 w-full max-w-2xl px-6">
+        <button
+          onClick={() => handleSelection("red-pill")}
+          className="group inline-flex items-center gap-2 px-6 py-3 bg-neutral-900 text-white rounded-full text-sm font-medium transition-all hover:bg-neutral-800 hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fafafa]"
+          aria-label="Ver portafolio completo"
+        >
+          Ver Portafolio
+          <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </button>
+        <div className="flex flex-col sm:flex-row gap-8 sm:gap-16 items-center justify-center w-full">
         
         {/* Blue Pill */}
         <button
@@ -286,6 +303,7 @@ export function ConstructIntro({ onSelect }: ConstructIntroProps) {
           </div>
         </button>
 
+        </div>
       </div>
 
       {/* Global Transition Flash */}

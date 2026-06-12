@@ -52,13 +52,13 @@ useEffect(() => {
 
     const currentPhrase = PHRASES[phraseIndex]
     if (!currentPhrase) return
-    const speed = isDeleting ? 30 : 80
+    const speed = isDeleting ? 20 : 40
 
     mainTimerRef.current = setTimeout(() => {
       if (!isDeleting) {
         setDisplayText(currentPhrase.substring(0, displayText.length + 1))
-        
-        if (displayText === currentPhrase) {
+
+        if (displayText === currentPhrase || displayText.length >= currentPhrase.length - 1) {
           if (phraseIndex === PHRASES.length - 1) {
             const t = setTimeout(() => {
               setIsFinished(true)
@@ -66,12 +66,14 @@ useEffect(() => {
             }, 1500)
             timeoutRefs.current.push(t)
           } else {
-            deleteTimerRef.current = setTimeout(() => setIsDeleting(true), 2500)
+            deleteTimerRef.current = setTimeout(() => setIsDeleting(true), 1200)
           }
         }
       } else {
-        setDisplayText(currentPhrase.substring(0, displayText.length - 1))
-        if (displayText === "") {
+        const halfway = Math.ceil(currentPhrase.length / 2)
+        if (displayText.length > halfway) {
+          setDisplayText(currentPhrase.substring(0, displayText.length - 1))
+        } else {
           setIsDeleting(false)
           setPhraseIndex((prev) => prev + 1)
         }

@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
-import { LensCursor } from '@/components/lens-cursor'
 import './globals.css'
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
@@ -135,7 +134,6 @@ export default function RootLayout({
         >
           Saltar al contenido principal
         </a>
-        <LensCursor />
         {children}
         <Analytics />
       </body>
