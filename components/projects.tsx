@@ -1,89 +1,17 @@
 "use client"
 
 import { useState, useRef, useEffect, useCallback } from "react"
-import { Building2, X, Maximize2 } from "lucide-react"
+import { Building2, X, Maximize2, ExternalLink } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Canvas } from "@react-three/fiber"
 import { ExplodedStack } from "./canvas/exploded-stack"
 import { PostProcessing } from "./canvas/post-processing"
 import { sectionVariants, cardVariants, viewport, duration, ease } from "@/lib/motion"
 import { ArchitectureBlueprint } from "./projects/architecture-blueprint"
-
-const projects = [
-  {
-    id: "one-consultores",
-    title: "ONE Consultores - Software a Medida",
-    company: "ONE Consultores",
-    year: "2025",
-    problem: "Empresas requerían soluciones de software personalizadas con ciclos de desarrollo ágiles y despliegues continuos.",
-    solution: "Desarrollo de software a medida bajo metodología SCRUM, con implementación de pipelines CI/CD y arquitectura containerizada para entregas consistentes.",
-    technologies: ["Vue 3", "TypeScript", "Python", "Express.js", "PostgreSQL", "Docker"],
-    decisions: [
-      "Metodología SCRUM para entregas iterativas y feedback continuo",
-      "Contenedores Docker para ambientes reproducibles",
-      "Despliegues continuos con Jenkins",
-    ],
-  },
-  {
-    id: "avisodecobro",
-    title: "Avisodecobro - Plataforma SaaS",
-    company: "Avisodecobro",
-    year: "2024",
-    problem: "Administradores de edificios necesitaban una plataforma centralizada para gestionar gastos comunes de forma eficiente.",
-    solution: "Plataforma web tipo SaaS para administración de gastos comunes, con participación completa en frontend y backend.",
-    technologies: ["React", "TypeScript", "Django", "PostgreSQL"],
-    decisions: [
-      "Arquitectura SaaS multi-tenant para escalabilidad",
-      "API REST con Django REST Framework",
-      "Interfaz responsive con React y TypeScript",
-    ],
-  },
-  {
-    id: "graba2",
-    title: "Graba2.cl - Aplicación Web",
-    company: "Graba2.cl",
-    year: "2023",
-    problem: "Cliente necesitaba una aplicación web para gestionar pedidos de impresión de stickers personalizados para vidrios de autos.",
-    solution: "Desarrollo de aplicación web completa con trabajo directo con cliente y liderazgo de equipo pequeño.",
-    technologies: ["React", "Django", "SQL Server"],
-    decisions: [
-      "Comunicación directa con cliente para validar requerimientos",
-      "Liderazgo técnico de equipo de desarrollo",
-      "Stack React + Django para desarrollo fullstack eficiente",
-    ],
-  },
-  {
-    id: "da5",
-    title: "DA5 - Dashboards y Visualización",
-    company: "DA5",
-    year: "2022-2024",
-    problem: "Calmly.cl requería dashboards de visualización de datos con seguridad reforzada y múltiples integraciones.",
-    solution: "Desarrollo de dashboards para visualización de datos, implementación de proxy inverso en Node.js para seguridad, y participación en PredictiveLab.",
-    technologies: ["Node.js", "React", "WordPress", "Docker"],
-    decisions: [
-      "Proxy inverso en Node.js para capa de seguridad adicional",
-      "Dashboards interactivos para visualización de métricas",
-      "Migraciones y optimización de sitios WordPress",
-    ],
-  },
-  {
-    id: "icono",
-    title: "Icono Marketing - Infraestructura Cloud",
-    company: "Icono Marketing",
-    year: "2022-2023",
-    problem: "Necesidad de migrar y configurar servidores web en la nube con stack LAMP optimizado.",
-    solution: "Levantamiento de servidores web, migración a Google Cloud Platform y configuración completa de stack Apache, PHP y MariaDB en Linux Debian.",
-    technologies: ["Linux", "Apache", "PHP", "MariaDB", "GCP"],
-    decisions: [
-      "Migración a Google Cloud Platform para escalabilidad",
-      "Configuration optimizada de Apache y PHP",
-      "Administración de servidores Linux Debian",
-    ],
-  },
-]
+import { projects, type Project } from "@/data/projects"
 
 export function Projects() {
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [viewMode, setViewMode] = useState<"visual" | "technical">("visual")
   const modalRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
@@ -196,9 +124,24 @@ export function Projects() {
                   ))}
                 </div>
 
-                <div className="pt-4 flex items-center gap-2 text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                  <Maximize2 className="w-3 h-3" />
-                  Ver Blueprint
+                <div className="pt-4 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Maximize2 className="w-3 h-3" />
+                    Ver Blueprint
+                  </div>
+                  {project.url && (
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1 text-xs font-mono text-muted-foreground hover:text-primary transition-colors"
+                      aria-label={`Visitar ${new URL(project.url).hostname}`}
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      {new URL(project.url).hostname}
+                    </a>
+                  )}
                 </div>
               </div>
             </motion.div>

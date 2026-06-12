@@ -8,6 +8,7 @@ export interface Project {
   solution: string
   technologies: string[]
   decisions: string[]
+  url?: string
 }
 
 export const projects: Project[] = [
@@ -40,6 +41,7 @@ export const projects: Project[] = [
       "API REST con Django REST Framework",
       "Interfaz responsive con React y TypeScript",
     ],
+    url: "https://avisodecobro.cl",
   },
   {
     id: "graba2",
@@ -55,6 +57,7 @@ export const projects: Project[] = [
       "Liderazgo técnico de equipo de desarrollo",
       "Stack React + Django para desarrollo fullstack eficiente",
     ],
+    url: "https://graba2.cl",
   },
   {
     id: "da5",
