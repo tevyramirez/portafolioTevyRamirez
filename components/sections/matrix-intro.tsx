@@ -1,42 +1,23 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Canvas } from "@react-three/fiber"
-import { AdvancedMatrixRain } from "@/components/canvas/advanced-matrix-rain"
+import { motion } from "framer-motion"
 
 interface MatrixIntroProps {
   onComplete: () => void
 }
 
-const PHRASES = [
-  "Wake up, Neo...",
-  "The Matrix has you...",
-  "Follow the white rabbit.",
-  "Knock, knock."
-]
+const MESSAGE = "Esto es solo una simulación."
+const SUBMESSAGE = "Pero lo que vas a ver después, no."
 
 export function MatrixIntro({ onComplete }: MatrixIntroProps) {
-  const [phraseIndex, setPhraseIndex] = useState(0)
+  const [phase, setPhase] = useState<"typing" | "fading">("typing")
   const [displayText, setDisplayText] = useState("")
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [isFinished, setIsFinished] = useState(false)
-  const [isGlitching, setIsGlitching] = useState(false)
-  const timeoutRefs = useRef<Array<ReturnType<typeof setTimeout>>>([])
-  const mainTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const deleteTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const clearAllTimeouts = useCallback(() => {
-    timeoutRefs.current.forEach(clearTimeout)
-    timeoutRefs.current = []
-    if (mainTimerRef.current) clearTimeout(mainTimerRef.current)
-    if (deleteTimerRef.current) clearTimeout(deleteTimerRef.current)
-  }, [])
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const handleSkip = useCallback(() => {
-    setIsGlitching(true)
-    const t = setTimeout(() => onComplete(), 800)
-    timeoutRefs.current.push(t)
+    setPhase("fading")
+    timerRef.current = setTimeout(() => onComplete(), 400)
   }, [onComplete])
 
   useEffect(() => {
@@ -47,112 +28,70 @@ export function MatrixIntro({ onComplete }: MatrixIntroProps) {
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [handleSkip])
 
-useEffect(() => {
-    if (isFinished || isGlitching) return
-
-    const currentPhrase = PHRASES[phraseIndex]
-    if (!currentPhrase) return
-    const speed = isDeleting ? 20 : 40
-
-    mainTimerRef.current = setTimeout(() => {
-      if (!isDeleting) {
-        setDisplayText(currentPhrase.substring(0, displayText.length + 1))
-
-        if (displayText === currentPhrase || displayText.length >= currentPhrase.length - 1) {
-          if (phraseIndex === PHRASES.length - 1) {
-            const t = setTimeout(() => {
-              setIsFinished(true)
-              handleSkip()
-            }, 1500)
-            timeoutRefs.current.push(t)
-          } else {
-            deleteTimerRef.current = setTimeout(() => setIsDeleting(true), 1200)
-          }
-        }
-      } else {
-        const halfway = Math.ceil(currentPhrase.length / 2)
-        if (displayText.length > halfway) {
-          setDisplayText(currentPhrase.substring(0, displayText.length - 1))
-        } else {
-          setIsDeleting(false)
-          setPhraseIndex((prev) => prev + 1)
-        }
-      }
-    }, speed)
-
-    return () => {
-      if (mainTimerRef.current) clearTimeout(mainTimerRef.current)
-    }
-  }, [displayText, isDeleting, phraseIndex, isFinished, isGlitching, handleSkip])
-
   useEffect(() => {
-    return () => clearAllTimeouts()
-  }, [clearAllTimeouts])
+    if (phase !== "typing") return
+    if (displayText.length < MESSAGE.length) {
+      timerRef.current = setTimeout(() => {
+        setDisplayText(MESSAGE.substring(0, displayText.length + 1))
+      }, 45)
+    } else {
+      timerRef.current = setTimeout(() => {
+        setPhase("fading")
+        setTimeout(() => onComplete(), 900)
+      }, 1800)
+    }
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current)
+    }
+  }, [displayText, phase, onComplete])
 
   return (
     <motion.div
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9999] bg-[#020617] flex items-center justify-center overflow-hidden"
+      animate={{ opacity: phase === "fading" ? 0 : 1 }}
+      transition={{ duration: 0.4 }}
+      className="fixed inset-0 z-[9999] bg-[#fafafa] flex flex-col items-center justify-center overflow-hidden"
     >
-      {/* SOTA Matrix Rain - Shader based */}
-      <div className="absolute inset-0 z-0 opacity-40" role="img" aria-label="Efecto visual de lluvia de código estilo Matrix">
-        <Canvas camera={{ position: [0, 0, 1] }} aria-hidden="true">
-          <AdvancedMatrixRain />
-        </Canvas>
+      <div className="sr-only">
+        <p>Introducción al portafolio de Sebastián Ramírez. Mensaje: {MESSAGE} {SUBMESSAGE}</p>
       </div>
 
-      {/* Cinematic Vignette */}
-      <div className="absolute inset-0 z-10 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(2,6,23,0.8)_100%)]" />
-
-      {/* Terminal UI - Top Left */}
-      <div className="absolute top-12 left-12 z-20 w-full max-w-2xl pointer-events-none">
-        <AnimatePresence mode="wait">
-          {!isGlitching && (
-            <motion.div
-              key={phraseIndex}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, filter: "blur(8px)" }}
-              className="font-mono text-xl md:text-2xl lg:text-3xl text-[#4ade80] tracking-tight"
-              style={{
-                textShadow: "0 0 10px rgba(74, 222, 128, 0.5)"
-              }}
-            >
-              <span className="inline-block min-h-[1em]">{displayText}</span>
-              <motion.span
-                animate={{ opacity: [0, 1, 0] }}
-                transition={{ repeat: Infinity, duration: 0.8 }}
-                className="ml-1 inline-block w-[0.5em] h-[1em] bg-[#4ade80] align-middle"
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Global Glitch Overlay */}
-      <AnimatePresence>
-        {isGlitching && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="absolute inset-0 z-50 pointer-events-none bg-white mix-blend-difference"
-            transition={{ duration: 0.1, repeat: 5, repeatType: "reverse" }}
+      <div className="relative z-10 max-w-2xl px-6 text-center">
+        <div className="font-mono text-[10px] text-neutral-400 tracking-[0.4em] uppercase mb-8">
+          PORTFOLIO · 2026
+        </div>
+        <h1
+          className="text-3xl md:text-5xl lg:text-6xl font-light text-neutral-900 tracking-tight leading-[1.1] font-sans min-h-[1.1em]"
+          style={{ letterSpacing: "-0.02em" }}
+        >
+          {displayText}
+          <motion.span
+            animate={{ opacity: [0, 1, 0] }}
+            transition={{ repeat: Infinity, duration: 0.9 }}
+            className="inline-block w-[0.04em] h-[0.9em] bg-neutral-900 align-middle ml-1"
           />
+        </h1>
+        {phase === "fading" && (
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.6 }}
+            className="mt-6 text-sm md:text-base text-neutral-500 font-light"
+          >
+            {SUBMESSAGE}
+          </motion.p>
         )}
-      </AnimatePresence>
+      </div>
 
-      <div className="fixed bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-[60]">
+      <div className="fixed bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-20">
         <button
           onClick={handleSkip}
-          className="px-4 py-2 bg-white/5 hover:bg-white/10 text-[#4ade80] border border-[#4ade80]/30 hover:border-[#4ade80]/60 rounded-lg text-sm font-mono transition-all backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-[#4ade80] focus:ring-offset-2 focus:ring-offset-[#020617]"
+          className="px-4 py-2 text-neutral-500 hover:text-neutral-900 text-xs font-mono transition-colors focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 focus-visible:ring-offset-[#fafafa] rounded"
           aria-label="Saltar introducción"
         >
-          Saltar intro [Esc]
+          Saltar [Esc]
         </button>
-        <span className="text-[10px] font-mono text-[#4ade80]/40 uppercase tracking-[0.3em] pointer-events-none animate-pulse">
-          System initialized
-        </span>
       </div>
     </motion.div>
   )
