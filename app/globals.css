@@ -81,6 +81,21 @@
   --color-matrix-green: oklch(75% 0.25 150);
 }
 
+/* Brand Cuidador — Blue Pill mode (portafolio corporativo) */
+:root {
+  --bp-bg: #FBF9F4;
+  --bp-surface: #F2EFE8;
+  --bp-surface-alt: #FFFFFF;
+  --bp-ink: #1D1D1F;
+  --bp-muted: #6B6B66;
+  --bp-border: #E2DDD2;
+  --bp-border-strong: #D6D0C4;
+  --bp-matrix: #2FA46A;
+  --bp-matrix-soft: #E4F0E8;
+  --bp-matrix-ink: #13502F;
+  --bp-on-accent: #FBF9F4;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
