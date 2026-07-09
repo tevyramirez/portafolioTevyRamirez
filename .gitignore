@@ -33,7 +33,12 @@ next-env.d.ts
 .agents/
 .antigravitycli/
 conductor/
-docs/
 skills-lock.json
 design-state.md
 data/*.json
+
+# Excepción: documentos de marca (brand kit + templates) se versionan
+# Ignora todo docs/ excepto los archivos de marca explícitos
+docs/*
+!docs/brand.md
+!docs/presupuesto-template.md
