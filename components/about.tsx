@@ -49,7 +49,7 @@ export function About() {
         >
           {/* Header */}
           <div className="col-span-12 flex items-center gap-4 mb-8">
-            <span className="font-mono text-sm font-bold text-secondary">01.</span>
+            <span className="font-mono text-sm font-bold text-secondary">02.</span>
             <h2 className="font-display text-display-lg text-ink leading-none">El Manifiesto Sónico</h2>
             <div className="flex-1 h-0.5 bg-ink-20" />
           </div>

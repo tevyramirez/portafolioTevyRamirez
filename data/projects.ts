@@ -9,6 +9,8 @@ export interface Project {
   technologies: string[]
   decisions: string[]
   url?: string
+  featured: boolean
+  sector: string[]
 }
 
 export const projects: Project[] = [
@@ -29,6 +31,8 @@ export const projects: Project[] = [
       "PDFs con QR generados server-side (weasyprint) para avisos de cobro físicos",
     ],
     url: "https://avisodecobro.cl",
+    featured: true,
+    sector: ["SaaS", "Multi-tenant", "Fintech"],
   },
   {
     id: "asprotex",
@@ -47,6 +51,8 @@ export const projects: Project[] = [
       "14 líneas de producto navegables mediante mega-menú custom sin plugin de megamenu",
     ],
     url: "https://asprotex.cl",
+    featured: false,
+    sector: ["B2B", "WordPress", "Plugin Custom"],
   },
   {
     id: "micasaya",
@@ -65,6 +71,8 @@ export const projects: Project[] = [
       "Video hero autoplay/muted/loop con poster JPG como fallback para conexiones lentas",
     ],
     url: "https://micasaya.cl",
+    featured: false,
+    sector: ["B2C", "WordPress", "Landing"],
   },
   {
     id: "evaluador-docente",
@@ -82,6 +90,8 @@ export const projects: Project[] = [
       "Deploy contenerizado en VM propia (45.79.160.99) por costos vs. Vercel para una plataforma de uso interno",
       "CI/CD desde GitHub Actions a la VM con secrets por entorno (no GitHub-deploy-keys)",
     ],
+    featured: false,
+    sector: ["EdTech", "Plataforma", "Next.js"],
   },
   {
     id: "mondaca",
@@ -98,6 +108,8 @@ export const projects: Project[] = [
       "Video hero autoplay/loop con self-hosted en /public: evita dependencias de YouTube/Vimeo y mantiene rendimiento",
       "Tailwind v4 CSS-first con tokens definidos en @theme: sin tailwind.config.js, tokens explícitos en global.css",
     ],
+    featured: false,
+    sector: ["Corporativo", "Landing", "Industrial"],
   },
   {
     id: "datametrik",
@@ -114,6 +126,8 @@ export const projects: Project[] = [
       "5 variantes de diseño en /preview como rutas estáticas: facilita iteración visual con stakeholders no técnicos",
       "Tailwind v4 via plugin Vite (@tailwindcss/vite): integración CSS-first, sin tailwind.config.js",
     ],
+    featured: true,
+    sector: ["BI", "Data", "Corporativo"],
   },
   {
     id: "beny-blues",
@@ -131,6 +145,8 @@ export const projects: Project[] = [
       "Film-strip horizontal con scroll-snap manual (CSS scroll-snap-type): sin librería de carrusel",
       "prefers-reduced-motion respetado en el vinilo 3D: el shader se renderiza estático si el usuario lo requiere",
     ],
+    featured: true,
+    sector: ["Música", "Audio-reactivo", "Three.js"],
   },
   {
     id: "proyectopetorca",
@@ -147,6 +163,8 @@ export const projects: Project[] = [
       "Zod para validación de formularios compartidos cliente/servidor con un solo schema",
       "Mobile-first desde el commit 0c74b70: el usuario primario es técnico en terreno, no analista en oficina",
     ],
+    featured: false,
+    sector: ["Data Viz", "Dashboard", "Next.js"],
   },
   {
     id: "guitartab",
@@ -163,6 +181,8 @@ export const projects: Project[] = [
       "MediaPipe Hand Landmarker para captura en vivo: corre en CPU y entrega landmarks con la latencia necesaria",
       "Streamlit para UI: el producto es una herramienta técnica, no requiere UX pulida de consumidor",
     ],
+    featured: true,
+    sector: ["ML", "Audio", "Python"],
   },
   {
     id: "one-consultores",
@@ -178,6 +198,8 @@ export const projects: Project[] = [
       "Contenedores Docker para ambientes reproducibles",
       "Despliegues continuos con Jenkins",
     ],
+    featured: false,
+    sector: ["Software a Medida", "Fullstack"],
   },
   {
     id: "graba2",
@@ -194,5 +216,7 @@ export const projects: Project[] = [
       "Stack React + Django para desarrollo fullstack eficiente",
     ],
     url: "https://graba2.cl",
+    featured: false,
+    sector: ["Fullstack", "E-commerce"],
   },
 ]

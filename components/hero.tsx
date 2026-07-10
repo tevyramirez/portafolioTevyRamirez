@@ -59,7 +59,7 @@ export function Hero() {
               variants={fadeUp}
               className="font-ui font-semibold text-sm uppercase tracking-widest text-ink-50 mb-4"
             >
-              Interactive Sound Architect
+              CREATIVE DEVELOPER / SOUND ARCHITECT
             </motion.p>
 
             <motion.h1
@@ -76,7 +76,7 @@ export function Hero() {
               variants={fadeUp}
               className="font-body text-lg md:text-xl text-ink-70 leading-relaxed max-w-xl mt-6"
             >
-              I Code High-Performance Interfaces and Compose Soundscapes
+              Diseño y desarrollo productos digitales de alto rendimiento. Interfaces con estructura, movimiento y sonido.
             </motion.p>
 
             <motion.div variants={fadeUpDelay} className="flex flex-col sm:flex-row gap-4 mt-8">

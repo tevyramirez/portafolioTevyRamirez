@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { X, ExternalLink } from 'lucide-react'
 import { CardVinyl } from '@/components/ui/card-vinyl'
 import { Badge } from '@/components/ui/badge'
+import { ProjectSleeve } from '@/components/project-sleeve'
 import { projects, type Project } from '@/data/projects'
 import { useAudioInteraction } from '@/hooks/useAudioInteraction'
 
@@ -14,6 +15,9 @@ const fadeUp = {
   hidden: { opacity: 0, y: 24 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeBrutal } },
 }
+
+const featured = projects.filter((p) => p.featured)
+const archive = projects.filter((p) => !p.featured)
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
@@ -69,6 +73,7 @@ export function Projects() {
   return (
     <section id="projects" className="py-24 md:py-32 px-5 md:px-10 relative">
       <div className="max-w-container mx-auto">
+        {/* Featured header */}
         <motion.div
           className="flex items-center gap-4 mb-12"
           initial="hidden"
@@ -76,14 +81,55 @@ export function Projects() {
           viewport={{ once: true, margin: '-80px' }}
           variants={fadeUp}
         >
-          <span className="font-mono text-sm font-bold text-secondary">02.</span>
-          <h2 className="font-display text-display-lg text-ink leading-none">La Discografía de Código</h2>
+          <span className="font-mono text-sm font-bold text-secondary">01.</span>
+          <h2 className="font-display text-display-lg text-ink leading-none">Discografía Destacada</h2>
           <div className="flex-1 h-0.5 bg-ink-20" />
         </motion.div>
 
+        {/* Featured grid — 2 columns */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+          <AnimatePresence>
+            {featured.map((project, i) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.2, 0, 0, 1] }}
+                className={i === 0 ? 'md:row-span-1' : ''}
+              >
+                <CardVinyl
+                  title={project.title}
+                  tech={project.technologies}
+                  trackNumber={i + 1}
+                  sector={project.sector}
+                  featured
+                  onClick={() => handleOpen(project)}
+                >
+                  <ProjectSleeve projectId={project.id} />
+                </CardVinyl>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Archive divider */}
+        <motion.div
+          className="flex items-center gap-4 mb-10"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-80px' }}
+          variants={fadeUp}
+        >
+          <div className="h-0.5 bg-ink-20 flex-1" />
+          <span className="font-mono text-xs font-bold text-ink-40 uppercase tracking-widest">B-Sides / Archivo</span>
+          <div className="h-0.5 bg-ink-20 flex-1" />
+        </motion.div>
+
+        {/* Archive grid — 3 columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
-            {projects.map((project, i) => (
+            {archive.map((project, i) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 24 }}
@@ -94,14 +140,11 @@ export function Projects() {
                 <CardVinyl
                   title={project.title}
                   tech={project.technologies}
-                  trackNumber={i + 1}
+                  trackNumber={featured.length + i + 1}
+                  sector={project.sector}
                   onClick={() => handleOpen(project)}
                 >
-                  <div className="bg-ink p-6 flex items-center justify-center border-b-6 border-ink">
-                    <div className="w-24 h-24 rounded-full border-4 border-accent flex items-center justify-center">
-                      <div className="w-8 h-8 rounded-full border-2 border-accent" />
-                    </div>
-                  </div>
+                  <ProjectSleeve projectId={project.id} />
                 </CardVinyl>
               </motion.div>
             ))}

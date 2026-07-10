@@ -221,7 +221,7 @@ export function Contact() {
               <p className="font-mono text-sm font-bold text-ink mb-2">Tarifa de Referencia</p>
               <p className="font-display text-display-md text-ink leading-none mb-2">25&ndash;45 UF</p>
               <p className="font-body text-sm text-ink-70">
-                Proyectos web a medida. Presupuesto según alcance técnico y requerimientos.
+                Proyectos web a medida. Presupuesto según alcance técnico y requerimientos. Desde landing pages hasta plataformas multi-tenant complejas.
               </p>
             </div>
           </motion.div>
@@ -232,7 +232,7 @@ export function Contact() {
       <footer className="mt-24 pt-8 border-t-3 border-ink-20 max-w-container mx-auto px-5 md:px-0">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="font-mono text-sm text-ink-50 text-center md:text-left">
-            &copy; {new Date().getFullYear()} Tevy Ramírez &mdash; Interactive Sound Architect
+            &copy; {new Date().getFullYear()} Tevy Ramírez &mdash; CREATIVE DEVELOPER / SOUND ARCHITECT
           </p>
           <p className="font-mono text-sm text-ink-30 text-center">
             Hecho con código y sonido en Talca, Maule

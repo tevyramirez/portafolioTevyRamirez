@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion'
 import { Header } from '@/components/header'
 import { Hero } from '@/components/hero'
 import { About } from '@/components/about'
@@ -17,6 +17,7 @@ export default function HomeClient() {
   }, [])
 
   return (
+    <MotionConfig reducedMotion="user">
     <AnimatePresence mode="wait">
       {showIntro ? (
         <motion.div
@@ -32,7 +33,7 @@ export default function HomeClient() {
               <div className="w-8 h-8 border-3 border-ink" />
             </div>
             <p className="font-display text-display-lg text-ink leading-none mb-2">TR</p>
-            <p className="font-mono text-sm text-ink-50">Interactive Sound Architect</p>
+            <p className="font-mono text-sm text-ink-50">CREATIVE DEVELOPER / SOUND ARCHITECT</p>
             <div className="mt-6 flex justify-center">
               <div className="spinner-brutal" aria-label="Cargando" />
             </div>
@@ -55,5 +56,6 @@ export default function HomeClient() {
         </motion.div>
       )}
     </AnimatePresence>
+    </MotionConfig>
   )
 }
