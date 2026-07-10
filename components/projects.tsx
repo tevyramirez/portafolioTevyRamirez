@@ -1,35 +1,45 @@
-"use client"
+'use client'
 
-import { useState, useRef, useEffect, useCallback } from "react"
-import { Building2, X, Maximize2, ExternalLink } from "lucide-react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Canvas } from "@react-three/fiber"
-import { ExplodedStack } from "./canvas/exploded-stack"
-import { PostProcessing } from "./canvas/post-processing"
-import { sectionVariants, cardVariants, viewport, duration, ease } from "@/lib/motion"
-import { ArchitectureBlueprint } from "./projects/architecture-blueprint"
-import { projects, type Project } from "@/data/projects"
+import { useState, useRef, useEffect, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { X, ExternalLink } from 'lucide-react'
+import { CardVinyl } from '@/components/ui/card-vinyl'
+import { Badge } from '@/components/ui/badge'
+import { projects, type Project } from '@/data/projects'
+import { useAudioInteraction } from '@/hooks/useAudioInteraction'
+
+const easeBrutal: [number, number, number, number] = [0.2, 0, 0, 1]
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: easeBrutal } },
+}
 
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
-  const [viewMode, setViewMode] = useState<"visual" | "technical">("visual")
   const modalRef = useRef<HTMLDivElement>(null)
   const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const { playClick, playHover } = useAudioInteraction()
+
+  const handleOpen = useCallback((project: Project) => {
+    setSelectedProject(project)
+    playClick(440)
+  }, [playClick])
 
   const handleClose = useCallback(() => {
     setSelectedProject(null)
-    setViewMode("visual")
-  }, [])
+    playHover(294)
+  }, [playHover])
 
   useEffect(() => {
     if (!selectedProject) return
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         handleClose()
         return
       }
-      if (e.key === "Tab" && modalRef.current) {
+      if (e.key === 'Tab' && modalRef.current) {
         const focusable = modalRef.current.querySelectorAll<HTMLElement>(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         )
@@ -46,109 +56,60 @@ export function Projects() {
       }
     }
 
-    document.addEventListener("keydown", handleKeyDown)
+    document.addEventListener('keydown', handleKeyDown)
     closeButtonRef.current?.focus()
-    document.body.style.overflow = "hidden"
+    document.body.style.overflow = 'hidden'
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown)
-      document.body.style.overflow = ""
+      document.removeEventListener('keydown', handleKeyDown)
+      document.body.style.overflow = ''
     }
   }, [selectedProject, handleClose])
 
   return (
-    <section id="projects" className="py-24 px-6 relative">
-      <div className="max-w-5xl mx-auto relative z-10">
+    <section id="projects" className="py-24 md:py-32 px-5 md:px-10 relative">
+      <div className="max-w-container mx-auto">
         <motion.div
-          className="flex items-center gap-4 mb-16"
+          className="flex items-center gap-4 mb-12"
           initial="hidden"
           whileInView="visible"
-          viewport={viewport}
-          variants={sectionVariants.header}
+          viewport={{ once: true, margin: '-80px' }}
+          variants={fadeUp}
         >
-          <span className="text-primary font-mono text-sm tracking-widest">02.</span>
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight">The Workshop</h2>
-          <motion.div 
-            className="flex-1 h-px bg-border/40"
-            initial={{ scaleX: 0, originX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={viewport}
-            transition={{ duration: duration.slow, delay: 0.2, ease: ease.out }}
-          />
+          <span className="font-mono text-sm font-bold text-secondary">02.</span>
+          <h2 className="font-display text-display-lg text-ink leading-none">La Discografía de Código</h2>
+          <div className="flex-1 h-0.5 bg-ink-20" />
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project) => (
-            <motion.div
-              key={project.id}
-              layoutId={`card-${project.id}`}
-              onClick={() => setSelectedProject(project)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault()
-                  setSelectedProject(project)
-                }
-              }}
-              tabIndex={0}
-              role="button"
-              aria-label={`Ver detalles de ${project.title}`}
-              className="glass group relative overflow-hidden rounded-xl border border-border/40 cursor-pointer hover:border-primary/40 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-background"
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewport}
-              variants={cardVariants.entrance}
-              whileHover="hover"
-            >
-              <div className="p-6 space-y-4">
-                <div className="flex justify-between items-start">
-                  <div className="p-2 bg-primary/10 rounded-lg text-primary">
-                    <Building2 className="w-5 h-5" />
+          <AnimatePresence>
+            {projects.map((project, i) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, delay: i * 0.06, ease: [0.2, 0, 0, 1] }}
+              >
+                <CardVinyl
+                  title={project.title}
+                  tech={project.technologies}
+                  trackNumber={i + 1}
+                  onClick={() => handleOpen(project)}
+                >
+                  <div className="bg-ink p-6 flex items-center justify-center border-b-6 border-ink">
+                    <div className="w-24 h-24 rounded-full border-4 border-accent flex items-center justify-center">
+                      <div className="w-8 h-8 rounded-full border-2 border-accent" />
+                    </div>
                   </div>
-                  <span className="text-xs font-mono text-muted-foreground">{project.year}</span>
-                </div>
-                
-                <div>
-                  <h3 className="text-lg font-bold text-foreground leading-tight group-hover:text-primary transition-colors">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
-                    {project.problem}
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-2 pt-2">
-                  {project.technologies.slice(0, 3).map((tech) => (
-                    <span key={tech} className="text-[10px] font-mono px-2 py-0.5 bg-secondary/50 text-secondary-foreground rounded border border-border/40">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="pt-4 flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2 text-xs font-mono text-primary opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Maximize2 className="w-3 h-3" />
-                    Ver Blueprint
-                  </div>
-                  {project.url && (
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="inline-flex items-center gap-1 text-xs font-mono text-muted-foreground hover:text-primary transition-colors"
-                      aria-label={`Visitar ${new URL(project.url).hostname}`}
-                    >
-                      <ExternalLink className="w-3 h-3" />
-                      {new URL(project.url).hostname}
-                    </a>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+                </CardVinyl>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
       </div>
 
+      {/* Modal */}
       <AnimatePresence>
         {selectedProject && (
           <>
@@ -157,110 +118,86 @@ export function Projects() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={handleClose}
-              className="fixed inset-0 bg-background/80 backdrop-blur-md z-[60] cursor-zoom-out"
+              className="fixed inset-0 bg-ink-70 z-modal cursor-zoom-out"
               aria-hidden="true"
             />
             <motion.div
-              layoutId={`card-${selectedProject.id}`}
               ref={modalRef}
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              transition={{ duration: 0.3, ease: [0.2, 0, 0, 1] }}
               role="dialog"
               aria-modal="true"
               aria-label={`Detalles de ${selectedProject.title}`}
-              className="fixed inset-4 md:inset-10 lg:inset-20 z-[70] glass rounded-2xl overflow-hidden border border-primary/20 flex flex-col"
+              className="fixed inset-4 md:inset-10 lg:inset-20 z-modal bg-bg border-6 border-ink shadow-brutal-2xl flex flex-col overflow-hidden"
             >
-              <div className="p-6 border-b border-border/40 flex justify-between items-center bg-background/40">
+              <div className="p-6 border-b-3 border-ink flex justify-between items-start bg-accent">
                 <div className="space-y-1">
                   <div className="flex items-center gap-3">
-                    <span className="text-primary font-mono text-xs uppercase tracking-widest">{selectedProject.company}</span>
-                    <span className="w-1 h-1 bg-border rounded-full" />
-                    <span className="text-muted-foreground font-mono text-xs">{selectedProject.year}</span>
+                    <Badge variant="default">{selectedProject.company}</Badge>
+                    <span className="w-1 h-1 bg-ink-40" />
+                    <span className="font-mono text-xs text-ink-50">{selectedProject.year}</span>
                   </div>
-                  <h3 className="text-xl md:text-2xl font-bold text-foreground">{selectedProject.title}</h3>
+                  <h3 className="font-display text-display-md text-ink">{selectedProject.title}</h3>
                 </div>
-                <button 
+                <button
                   ref={closeButtonRef}
                   onClick={handleClose}
+                  onMouseEnter={() => playHover(294)}
+                  className="w-12 h-12 flex items-center justify-center bg-bg border-3 border-ink text-ink hover:bg-ink hover:text-bg transition-colors flex-shrink-0"
                   aria-label="Cerrar detalles del proyecto"
-                  className="p-2 hover:bg-secondary rounded-full transition-colors text-muted-foreground hover:text-foreground"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5" strokeWidth={3} />
                 </button>
               </div>
 
-              <div className="px-6 py-4 bg-background/20 flex justify-center border-b border-border/20" role="tablist">
-                <div className="bg-secondary/50 p-1 rounded-lg flex gap-1 border border-border/40">
-                  <button
-                    onClick={() => setViewMode("visual")}
-                    role="tab"
-                    aria-selected={viewMode === "visual"}
-                    className={`px-4 py-1.5 text-xs font-mono rounded-md transition-all ${
-                      viewMode === "visual" 
-                        ? "bg-primary text-primary-foreground shadow-lg" 
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    Visual Preview
-                  </button>
-                  <button
-                    onClick={() => setViewMode("technical")}
-                    role="tab"
-                    aria-selected={viewMode === "technical"}
-                    className={`px-4 py-1.5 text-xs font-mono rounded-md transition-all ${
-                      viewMode === "technical" 
-                        ? "bg-primary text-primary-foreground shadow-lg" 
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    Technical Blueprint
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-6 md:p-10 custom-scrollbar" role="tabpanel">
-                <AnimatePresence mode="wait">
-                  {viewMode === "visual" ? (
-                    <motion.div
-                      key="visual"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                      className="space-y-12 h-full"
-                    >
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 h-full">
-                        <div className="space-y-6">
-                          <div>
-                            <h4 className="text-sm font-mono text-primary uppercase tracking-wider mb-2">Problem</h4>
-                            <p className="text-muted-foreground leading-relaxed">{selectedProject.problem}</p>
-                          </div>
-                          <div>
-                            <h4 className="text-sm font-mono text-primary uppercase tracking-wider mb-2">Solution</h4>
-                            <p className="text-muted-foreground leading-relaxed">{selectedProject.solution}</p>
-                          </div>
-                        </div>
-                        <div className="bg-secondary/30 rounded-xl min-h-[300px] border border-border/40 relative overflow-hidden" role="img" aria-label="Visualización 3D de la arquitectura del proyecto">
-                          <Canvas camera={{ position: [0, 0, 10], fov: 40 }} aria-hidden="true">
-                            <ambientLight intensity={0.5} />
-                            <pointLight position={[10, 10, 10]} intensity={1} color="#4ade80" />
-                            <PostProcessing />
-                            <ExplodedStack progress={1} project={selectedProject} />
-                          </Canvas>
-                          <div className="absolute bottom-4 right-4 text-[10px] font-mono text-primary/60 uppercase tracking-widest pointer-events-none">
-                            Live Stack Rendering
-                          </div>
-                        </div>
+              <div className="flex-1 overflow-y-auto p-6 md:p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-2">Diagnóstico</h4>
+                      <p className="font-body text-base text-ink-70 leading-relaxed">{selectedProject.problem}</p>
+                    </div>
+                    <div>
+                      <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-2">Solución</h4>
+                      <p className="font-body text-base text-ink-70 leading-relaxed">{selectedProject.solution}</p>
+                    </div>
+                  </div>
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-3">Stack Tecnológico</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProject.technologies.map((tech) => (
+                          <Badge key={tech} variant="accent">{tech}</Badge>
+                        ))}
                       </div>
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="technical"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -20 }}
-                    >
-                      <ArchitectureBlueprint project={selectedProject} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                    </div>
+                    <div>
+                      <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-3">Decisiones Técnicas</h4>
+                      <ul className="space-y-2">
+                        {selectedProject.decisions.map((decision, i) => (
+                          <li key={i} className="flex items-start gap-2 font-body text-sm text-ink-70">
+                            <span className="mt-1.5 w-1.5 h-1.5 bg-secondary flex-shrink-0" />
+                            {decision}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    {selectedProject.url && (
+                      <a
+                        href={selectedProject.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onMouseEnter={() => playHover(440)}
+                        className="inline-flex items-center gap-2 font-ui font-semibold text-sm text-ink border-3 border-ink px-5 py-3 bg-accent shadow-brutal-sm hover:shadow-brutal transition-shadow no-underline"
+                      >
+                        <ExternalLink className="w-4 h-4" strokeWidth={3} />
+                        Visitar sitio
+                      </a>
+                    )}
+                  </div>
+                </div>
               </div>
             </motion.div>
           </>

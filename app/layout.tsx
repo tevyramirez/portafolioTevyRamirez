@@ -1,16 +1,12 @@
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
-import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
-const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
-const geistMono = Geist_Mono({ subsets: ["latin"], variable: "--font-geist-mono" });
-
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0f0d" },
+    { media: "(prefers-color-scheme: light)", color: "#FFFDD0" },
+    { media: "(prefers-color-scheme: dark)", color: "#0A0A0A" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -18,15 +14,15 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://sebastianramirez.dev'),
+  metadataBase: new URL('https://tevyramirez.dev'),
   title: {
-    default: 'Sebastián Ramírez | Desarrollador Fullstack',
-    template: '%s | Sebastián Ramírez',
+    default: 'Tevy Ramírez — Creative Developer & Sound Architect',
+    template: '%s | Tevy Ramírez',
   },
-  description: 'Desarrollador Fullstack con experiencia en Vue 3, React, TypeScript, Node.js, Python y Docker. Desarrollo de software a medida y plataformas SaaS en producción.',
-  keywords: ['Fullstack Developer', 'Vue 3', 'React', 'TypeScript', 'Node.js', 'Python', 'Docker', 'SaaS', 'DevOps', 'Desarrollador Chile'],
-  authors: [{ name: 'Sebastián Ramírez' }],
-  creator: 'Sebastián Ramírez',
+  description: 'Desarrollo de software a medida de alto rendimiento y diseño de interfaces acústicas interactivas. Portafolio de Tevy Ramírez desde Talca, Región del Maule, Chile.',
+  keywords: ['Creative Developer', 'Sound Architect', 'React', 'Web Audio API', 'Frontend', 'Portafolio', 'Desarrollador Chile', 'Talca', 'Neo-Brutalism', 'Interactive Design'],
+  authors: [{ name: 'Tevy Ramírez' }],
+  creator: 'Tevy Ramírez',
   robots: {
     index: true,
     follow: true,
@@ -40,29 +36,29 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: 'website',
-    locale: 'es_ES',
-    url: 'https://sebastianramirez.dev',
-    siteName: 'Sebastián Ramírez | Portafolio',
-    title: 'Sebastián Ramírez | Desarrollador Fullstack',
-    description: 'Desarrollador Fullstack con experiencia en Vue 3, React, TypeScript, Node.js, Python y Docker.',
+    locale: 'es_CL',
+    url: 'https://tevyramirez.dev',
+    siteName: 'Tevy Ramírez | Creative Developer & Sound Architect',
+    title: 'Tevy Ramírez — Creative Developer & Sound Architect',
+    description: 'Desarrollo de software a medida de alto rendimiento y diseño de interfaces acústicas interactivas desde Talca, Chile.',
     images: [
       {
         url: '/og',
         width: 1200,
         height: 630,
-        alt: 'Sebastián Ramírez - Desarrollador Fullstack',
+        alt: 'Tevy Ramírez — Creative Developer & Sound Architect',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sebastián Ramírez | Desarrollador Fullstack',
-    description: 'Desarrollador Fullstack con experiencia en Vue 3, React, TypeScript, Node.js, Python y Docker.',
+    title: 'Tevy Ramírez — Creative Developer & Sound Architect',
+    description: 'Desarrollo de software a medida de alto rendimiento y diseño de interfaces acústicas interactivas desde Talca, Chile.',
     images: ['/og'],
     creator: '@tevyramirez',
   },
   alternates: {
-    canonical: 'https://sebastianramirez.dev',
+    canonical: 'https://tevyramirez.dev',
   },
   icons: {
     icon: '/icon.svg',
@@ -80,57 +76,73 @@ export default function RootLayout({
     "@graph": [
       {
         "@type": "Person",
-        "name": "Sebastián Ramírez",
-        "jobTitle": "Fullstack Engineer",
-        "url": "https://sebastianramirez.dev",
-        "description": "Desarrollador Fullstack con experiencia en Vue 3, React, TypeScript, Node.js, Python y Docker. Construcción de plataformas SaaS, arquitecturas seguras y software a medida.",
+        "name": "Tevy Ramírez",
+        "jobTitle": "Creative Developer & Sound Architect",
+        "url": "https://tevyramirez.dev",
+        "description": "Desarrollador de software a medida de alto rendimiento y diseño de interfaces acústicas interactivas. Interactive Sound Architect desde Talca, Región del Maule, Chile.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Talca",
+          "addressRegion": "Región del Maule",
+          "addressCountry": "CL"
+        },
         "sameAs": [
           "https://github.com/tevyramirez",
           "https://www.linkedin.com/in/sebastian-ramirez-ramirez-b831b0244/"
         ],
         "knowsAbout": [
-          "Software Engineering",
-          "Vue 3",
+          "Web Development",
+          "Web Audio API",
           "React",
           "TypeScript",
           "Node.js",
           "Python",
-          "Django",
+          "PostgreSQL",
           "Docker",
-          "CI/CD Pipelines",
-          "PostgreSQL"
+          "Neo-Brutalism Design",
+          "Sound Design"
         ],
         "hasOccupation": {
           "@type": "Occupation",
-          "name": "Fullstack Engineer"
-        },
-        "worksFor": [
-          { "@type": "Organization", "name": "ONE Consultores" },
-          { "@type": "Organization", "name": "Avisodecobro" },
-          { "@type": "Organization", "name": "DA5" },
-          { "@type": "Organization", "name": "Icono Marketing" }
-        ]
+          "name": "Creative Developer & Sound Architect"
+        }
       },
       {
         "@type": "WebSite",
-        "name": "Sebastián Ramírez",
-        "url": "https://sebastianramirez.dev"
+        "name": "Tevy Ramírez",
+        "url": "https://tevyramirez.dev"
       }
     ]
   }
 
   return (
-    <html lang="es-CL">
-      <Script
-        id="json-ld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <body className={`${geist.variable} ${geistMono.variable} font-sans antialiased noise-bg`}>
-        {/* Skip Link para accesibilidad */}
+    <html lang="es-CL" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Sora:wght@400;600;700&family=Space+Grotesk:wght@400;500;700&family=Space+Mono:wght@400;700&family=Syne:wght@700;800&display=swap"
+          rel="stylesheet"
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme');
+                  if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className="noise-bg">
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:bg-primary focus:text-primary-foreground focus:px-4 focus:py-2 focus:rounded-lg"
+          className="skip-link"
         >
           Saltar al contenido principal
         </a>

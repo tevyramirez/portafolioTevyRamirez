@@ -1,31 +1,30 @@
-"use client"
+'use client'
 
-import { useState, useEffect, useRef, useCallback } from "react"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { motion, AnimatePresence } from "framer-motion"
-import { duration, ease, spring } from "@/lib/motion"
+import { useState, useEffect, useRef, useCallback } from 'react'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
+import { useAudioInteraction } from '@/hooks/useAudioInteraction'
+import { useDarkMode } from '@/hooks/useDarkMode'
 
 const navItems = [
-  { name: "Sobre mí", href: "#about" },
-  { name: "Proyectos", href: "#projects" },
-  { name: "Augmented", href: "#augmented" },
-  { name: "Stack", href: "#stack" },
-  { name: "Contacto", href: "#contact" },
+  { name: 'Proyectos', href: '#projects' },
+  { name: 'Sobre Mí', href: '#about' },
+  { name: 'Contacto', href: '#contact' },
 ]
 
 export function Header() {
-  const [activeSection, setActiveSection] = useState("")
-  const [scrollProgress, setScrollProgress] = useState(0)
+  const [activeSection, setActiveSection] = useState('')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const { isDark, toggle } = useDarkMode()
+  const { playHover, playClick } = useAudioInteraction()
+  const hoverThrottle = useRef(false)
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollProgress(Math.min(window.scrollY / 100, 1))
-    }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  const throttledHover = useCallback(() => {
+    if (hoverThrottle.current) return
+    playHover(440)
+    hoverThrottle.current = true
+    setTimeout(() => { hoverThrottle.current = false }, 80)
+  }, [playHover])
 
   useEffect(() => {
     const observers: IntersectionObserver[] = []
@@ -42,7 +41,7 @@ export function Header() {
               }
             })
           },
-          { rootMargin: "-50% 0px -50% 0px" }
+          { rootMargin: '-50% 0px -50% 0px' }
         )
         observer.observe(element)
         observers.push(observer)
@@ -59,64 +58,32 @@ export function Header() {
   }, [])
 
   return (
-    <motion.header
-      initial={{ y: -10, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{
-        duration: duration.slow,
-        delay: 0.1,
-        ease: ease.out
-      }}
-      style={{
-        backgroundColor: `oklch(10% 0.02 160 / ${scrollProgress * 0.9})`,
-        backdropFilter: `blur(${scrollProgress * 16}px)`,
-        borderBottomColor: `oklch(30% 0.1 155 / ${scrollProgress * 0.5})`,
-      }}
-      className="fixed top-0 left-0 right-0 z-50 border-b border-transparent"
-    >
-      <nav className={cn(
-        "max-w-5xl mx-auto px-6 flex items-center justify-between transition-all",
-        scrollProgress > 0.5 ? "py-3" : "py-4"
-      )}
-        style={{ transitionDuration: '300ms', transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
-        aria-label="Navegación principal"
-      >
+    <header className="fixed top-0 left-0 right-0 z-sticky bg-bg border-b-3 border-ink">
+      <nav className="max-w-container mx-auto px-5 md:px-10 flex items-center justify-between h-16" aria-label="Navegación principal">
         <Link
           href="/"
-          className="text-foreground font-medium text-lg tracking-tight transition-colors duration-200 hover:text-primary"
+          className="font-display text-2xl font-black text-ink no-underline leading-none"
+          aria-label="Tevy Ramírez — Inicio"
         >
-          SR
+          TR
         </Link>
 
-        <ul className="hidden md:flex items-center gap-8" role="list">
+        <ul className="hidden md:flex items-center gap-10" role="list">
           {navItems.map((item) => (
             <li key={item.name}>
               <Link
                 href={item.href}
+                onMouseEnter={throttledHover}
                 className={cn(
-                  "relative text-sm font-medium transition-colors duration-200",
+                  'relative font-ui font-semibold text-sm uppercase tracking-wider no-underline transition-colors duration-fast ease-brutal',
                   activeSection === item.href.slice(1)
-                    ? "text-primary"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? 'text-ink'
+                    : 'text-ink-50 hover:text-ink'
                 )}
-                aria-current={activeSection === item.href.slice(1) ? "page" : undefined}
+                aria-current={activeSection === item.href.slice(1) ? 'page' : undefined}
               >
                 {item.name}
-                <AnimatePresence>
-                  {activeSection === item.href.slice(1) && (
-                    <motion.span
-                      layoutId="activeNav"
-                      className="absolute -bottom-1 left-0 right-0 h-px bg-primary"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{
-                        type: "spring",
-                        ...spring.snappy
-                      }}
-                    />
-                  )}
-                </AnimatePresence>
+                <span className="absolute -bottom-1 left-0 h-0.5 bg-accent transition-all duration-base ease-brutal" style={{ width: activeSection === item.href.slice(1) ? '100%' : '0%' }} />
               </Link>
             </li>
           ))}
@@ -127,22 +94,18 @@ export function Header() {
             href="https://github.com/tevyramirez"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground transition-colors duration-200 hover:text-foreground"
+            className="text-ink-50 hover:text-ink transition-colors"
             aria-label="GitHub"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z"
-              />
+              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0012 2z" />
             </svg>
           </Link>
           <Link
             href="https://www.linkedin.com/in/sebastian-ramirez-ramirez-b831b0244/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground transition-colors duration-200 hover:text-foreground"
+            className="text-ink-50 hover:text-ink transition-colors"
             aria-label="LinkedIn"
           >
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -151,52 +114,55 @@ export function Header() {
           </Link>
 
           <button
-            className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Cerrar menú" : "Abrir menú"}
+            onClick={toggle}
+            onMouseEnter={() => playHover(660)}
+            className="w-9 h-9 flex items-center justify-center border-2 border-ink font-mono text-sm font-bold bg-bg hover:bg-ink hover:text-bg transition-colors"
+            aria-label={isDark ? 'Activar modo claro' : 'Activar modo oscuro'}
+            aria-pressed={isDark}
+          >
+            {isDark ? '☀' : '☾'}
+          </button>
+
+          <button
+            className="md:hidden w-9 h-9 flex items-center justify-center border-2 border-ink text-ink"
+            onClick={() => { setMobileMenuOpen(!mobileMenuOpen); playClick() }}
+            aria-label={mobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
             aria-expanded={mobileMenuOpen}
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={3} d="M4 6h16M4 12h16M4 18h16" />
               )}
             </svg>
           </button>
         </div>
       </nav>
 
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border/20 bg-background/95 backdrop-blur-md"
-          >
-            <ul className="flex flex-col py-4 px-6 gap-1" role="list">
-              {navItems.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    onClick={closeMobileMenu}
-                    className={cn(
-                      "block py-2 px-3 rounded-lg text-sm font-medium transition-colors",
-                      activeSection === item.href.slice(1)
-                        ? "text-primary bg-primary/10"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                    )}
-                    aria-current={activeSection === item.href.slice(1) ? "page" : undefined}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
+      {mobileMenuOpen && (
+        <div className="md:hidden border-t-3 border-ink bg-bg">
+          <ul className="flex flex-col py-4 px-5 gap-1" role="list">
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  href={item.href}
+                  onClick={closeMobileMenu}
+                  className={cn(
+                    'block py-3 px-4 font-ui font-semibold text-sm uppercase tracking-wider border-2 border-transparent transition-colors',
+                    activeSection === item.href.slice(1)
+                      ? 'text-ink bg-accent border-ink'
+                      : 'text-ink hover:bg-ink-10 border-ink'
+                  )}
+                  aria-current={activeSection === item.href.slice(1) ? 'page' : undefined}
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </header>
   )
 }

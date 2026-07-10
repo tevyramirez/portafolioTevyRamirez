@@ -1,34 +1,33 @@
-import Link from "next/link"
+import Link from 'next/link'
 
 export default function NotFound() {
   return (
     <main
       id="main-content"
-      className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-background noise-bg"
+      className="min-h-screen flex flex-col items-center justify-center px-6 text-center bg-bg noise-bg"
     >
-      <div className="relative z-10 max-w-xl space-y-8">
-        <p className="font-mono text-xs text-primary tracking-[0.4em] uppercase">
+      <div className="max-w-lg border-6 border-ink shadow-brutal-2xl p-10 md:p-14 bg-bg">
+        <p className="font-mono text-xs text-secondary uppercase tracking-widest mb-4">
           404 // signal lost
         </p>
-        <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-foreground text-balance">
-          Esta ruta no existe
+        <h1 className="font-display text-display-xl text-ink leading-none mb-4">
+          Esta pista no existe
         </h1>
-        <p className="text-muted-foreground text-lg leading-relaxed max-w-md mx-auto text-pretty">
-          La página que buscas se ha desconectado del constructo. Vuelve al inicio para
-          continuar la navegación.
+        <p className="font-body text-base text-ink-70 leading-relaxed mb-8">
+          La página que buscas no está en este álbum. Quizás fue remasterizada o nunca se grabó.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-2">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-medium rounded-lg transition-all duration-200 hover:bg-primary/90 active:scale-[0.98]"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent text-ink border-3 border-ink font-ui font-semibold text-base no-underline shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm active:translate-x-1.5 active:translate-y-1.5 active:shadow-none transition-all duration-fast ease-brutal"
           >
-            Volver al inicio
+            Volver al Inicio
           </Link>
           <Link
             href="/#contact"
-            className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border/60 text-foreground font-medium rounded-lg transition-all duration-200 hover:bg-secondary/50 active:scale-[0.98]"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent text-ink border-3 border-ink font-ui font-semibold text-base no-underline shadow-brutal hover:bg-ink hover:text-bg hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm active:translate-x-1.5 active:translate-y-1.5 active:shadow-none transition-all duration-fast ease-brutal"
           >
-            Contactar
+            Contáctame
           </Link>
         </div>
       </div>
