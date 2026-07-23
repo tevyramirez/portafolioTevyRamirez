@@ -44,7 +44,7 @@ export function CardVinyl({ title, tech, trackNumber, sector, featured, onClick,
             {sector.slice(0, 3).map((s) => (
               <span
                 key={s}
-                className="font-mono text-[9px] font-bold uppercase tracking-wider bg-ink text-accent px-1.5 py-0.5 border border-accent"
+                className="font-mono text-[9px] font-bold uppercase tracking-wider bg-ink text-accent dark:bg-accent dark:text-bg px-1.5 py-0.5 border border-accent"
               >
                 {s}
               </span>
@@ -56,7 +56,7 @@ export function CardVinyl({ title, tech, trackNumber, sector, featured, onClick,
           {tech.slice(0, featured ? 4 : 3).map((t) => (
             <span
               key={t}
-              className="font-ui text-[10px] font-semibold uppercase tracking-wider bg-ink text-accent px-2 py-0.5 border-2 border-accent"
+              className="font-ui text-[10px] font-semibold uppercase tracking-wider bg-ink text-accent dark:bg-accent dark:text-bg px-2 py-0.5 border-2 border-accent"
             >
               {t}
             </span>
@@ -64,7 +64,7 @@ export function CardVinyl({ title, tech, trackNumber, sector, featured, onClick,
         </div>
       </div>
 
-      <div className="absolute top-2 left-2 font-mono text-xs font-bold text-accent bg-ink px-2 py-0.5 border-2 border-accent">
+      <div className="absolute top-2 left-2 font-mono text-xs font-bold text-accent bg-ink dark:text-bg dark:bg-accent px-2 py-0.5 border-2 border-accent">
         {String(trackNumber).padStart(2, '0')}
       </div>
     </button>

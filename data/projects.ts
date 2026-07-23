@@ -11,6 +11,8 @@ export interface Project {
   url?: string
   featured: boolean
   sector: string[]
+  role?: string
+  impact?: string
 }
 
 export const projects: Project[] = [
@@ -33,6 +35,8 @@ export const projects: Project[] = [
     url: "https://avisodecobro.cl",
     featured: true,
     sector: ["SaaS", "Multi-tenant", "Fintech"],
+    role: "Fullstack Developer & Technical Design",
+    impact: "Plataforma multi-tenant en producción gestionando gastos comunes de condominios reales en Chile. Procesamiento automático de pagos con trazabilidad contable completa y generación de PDFs con QR para avisos de cobro físicos.",
   },
   {
     id: "asprotex",
@@ -128,6 +132,8 @@ export const projects: Project[] = [
     ],
     featured: true,
     sector: ["BI", "Data", "Corporativo"],
+    role: "Frontend Developer & UI/UX Design",
+    impact: "Sitio corporativo publicado para consultora BI activa. Integración de WebGL lazy-loaded para diferenciación visual sin penalizar rendimiento en mobile. 5 variantes de diseño para iteración con stakeholders.",
   },
   {
     id: "beny-blues",
@@ -147,6 +153,8 @@ export const projects: Project[] = [
     ],
     featured: true,
     sector: ["Música", "Audio-reactivo", "Three.js"],
+    role: "Creative Developer & Sound Architect",
+    impact: "Portafolio musical con vinilo 3D que reacciona al audio en tiempo real usando Web Audio API como entrada directa del shader. Reproductor protegido por password gate. Sin librerías de audio externas.",
   },
   {
     id: "proyectopetorca",
@@ -183,6 +191,8 @@ export const projects: Project[] = [
     ],
     featured: true,
     sector: ["ML", "Audio", "Python"],
+    role: "ML Pipeline Developer",
+    impact: "Pipeline completo de audio a tablatura que corre 100% en CPU. Tres etapas desacopladas: separación de stems, transcripción MIDI y síntesis de video. Captura en vivo con MediaPipe Hand Landmarker.",
   },
   {
     id: "one-consultores",

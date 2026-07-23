@@ -101,13 +101,29 @@ export function Contact() {
           >
             {submitted ? (
               <div className="border-6 border-ink bg-accent p-8 shadow-brutal-lg text-center">
-                <p className="font-display text-display-md text-ink mb-3">¡Mensaje enviado!</p>
+                <p className="font-display text-display-md text-ink mb-3">Mensaje recibido</p>
                 <p className="font-body text-base text-ink-70">
-                  Te responderé pronto. Mientras tanto, revisa mis proyectos.
+                  Te responderé dentro de 24-48 hrs. Mientras tanto, revisa los casos de estudio.
                 </p>
               </div>
             ) : (
               <form ref={formRef} noValidate onSubmit={handleSubmit} className="space-y-6">
+                {Object.keys(errors).length > 0 && (
+                  <div role="alert" aria-live="polite" className="border-3 border-error p-4 bg-bg">
+                    <p className="font-ui font-semibold text-sm text-error uppercase tracking-wider">
+                      Corrige los siguientes errores:
+                    </p>
+                    <ul className="mt-2 space-y-1">
+                      {Object.entries(errors).map(([key, msg]) => (
+                        <li key={key} className="font-body text-sm text-error flex items-start gap-2">
+                          <span className="mt-1.5 w-1.5 h-1.5 bg-error flex-shrink-0" />
+                          {msg}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 <div>
                   <label htmlFor="field-name" className="block font-ui font-semibold text-sm text-ink mb-2">
                     Nombre <span className="text-error text-xs ml-1">obligatorio</span>
@@ -180,7 +196,7 @@ export function Contact() {
                   onMouseEnter={() => playHover(440)}
                   className="w-full"
                 >
-                  Enviar Mensaje
+                  Enviar Propuesta
                 </Button>
               </form>
             )}
@@ -194,6 +210,11 @@ export function Contact() {
             viewport={{ once: true, margin: '-80px' }}
             variants={fadeUp}
           >
+            <div className="flex items-center gap-2 mb-4">
+              <span className="w-2 h-2 bg-success rounded-full" />
+              <span className="font-mono text-xs text-ink-50 uppercase tracking-wider">Disponible para proyectos</span>
+            </div>
+
             <div className="space-y-4">
               {contactLinks.map((link) => (
                 <Link
@@ -217,7 +238,14 @@ export function Contact() {
               ))}
             </div>
 
-            <div className="border-3 border-ink p-6 shadow-brutal bg-accent mt-8">
+            <div className="border-3 border-ink p-5 bg-bg shadow-brutal-sm">
+              <p className="font-mono text-xs font-bold text-ink-50 uppercase tracking-wider mb-1">Cartera</p>
+              <p className="font-display text-display-lg text-ink leading-none">
+                11 <span className="font-body text-base text-ink-70 font-normal">proyectos entregados</span>
+              </p>
+            </div>
+
+            <div className="border-3 border-ink p-6 shadow-brutal bg-accent">
               <p className="font-mono text-sm font-bold text-ink mb-2">Tarifa de Referencia</p>
               <p className="font-display text-display-md text-ink leading-none mb-2">25&ndash;45 UF</p>
               <p className="font-body text-sm text-ink-70">
@@ -231,10 +259,10 @@ export function Contact() {
       {/* Footer */}
       <footer className="mt-24 pt-8 border-t-3 border-ink-20 max-w-container mx-auto px-5 md:px-0">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="font-mono text-sm text-ink-50 text-center md:text-left">
+          <p className="font-mono text-sm text-ink-70 text-center md:text-left">
             &copy; {new Date().getFullYear()} Tevy Ramírez &mdash; CREATIVE DEVELOPER / SOUND ARCHITECT
           </p>
-          <p className="font-mono text-sm text-ink-30 text-center">
+          <p className="font-mono text-sm text-ink-70 text-center">
             Hecho con código y sonido en Talca, Maule
           </p>
         </div>

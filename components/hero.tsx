@@ -84,7 +84,7 @@ export function Hero() {
                 href="#projects"
                 onClick={() => playClick()}
                 onMouseEnter={throttledHover}
-                className="inline-flex items-center justify-center gap-2 bg-accent text-ink border-3 border-ink px-8 py-4 font-ui font-semibold text-base no-underline shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm active:translate-x-1.5 active:translate-y-1.5 active:shadow-none transition-all duration-fast ease-brutal"
+                className="inline-flex items-center justify-center gap-2 bg-accent text-ink dark:text-bg border-3 border-ink px-8 py-4 font-ui font-semibold text-base no-underline shadow-brutal hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-brutal-sm active:translate-x-1.5 active:translate-y-1.5 active:shadow-none transition-all duration-fast ease-brutal"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3" strokeLinecap="square">
                   <path d="M12 5v14M5 12h14" />

@@ -73,7 +73,6 @@ export function Projects() {
   return (
     <section id="projects" className="py-24 md:py-32 px-5 md:px-10 relative">
       <div className="max-w-container mx-auto">
-        {/* Featured header */}
         <motion.div
           className="flex items-center gap-4 mb-12"
           initial="hidden"
@@ -86,7 +85,6 @@ export function Projects() {
           <div className="flex-1 h-0.5 bg-ink-20" />
         </motion.div>
 
-        {/* Featured grid — 2 columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
           <AnimatePresence>
             {featured.map((project, i) => (
@@ -96,7 +94,6 @@ export function Projects() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.5, delay: i * 0.08, ease: [0.2, 0, 0, 1] }}
-                className={i === 0 ? 'md:row-span-1' : ''}
               >
                 <CardVinyl
                   title={project.title}
@@ -113,7 +110,6 @@ export function Projects() {
           </AnimatePresence>
         </div>
 
-        {/* Archive divider */}
         <motion.div
           className="flex items-center gap-4 mb-10"
           initial="hidden"
@@ -126,7 +122,6 @@ export function Projects() {
           <div className="h-0.5 bg-ink-20 flex-1" />
         </motion.div>
 
-        {/* Archive grid — 3 columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence>
             {archive.map((project, i) => (
@@ -175,77 +170,212 @@ export function Projects() {
               aria-label={`Detalles de ${selectedProject.title}`}
               className="fixed inset-4 md:inset-10 lg:inset-20 z-modal bg-bg border-6 border-ink shadow-brutal-2xl flex flex-col overflow-hidden"
             >
-              <div className="p-6 border-b-3 border-ink flex justify-between items-start bg-accent">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-3">
-                    <Badge variant="default">{selectedProject.company}</Badge>
-                    <span className="w-1 h-1 bg-ink-40" />
-                    <span className="font-mono text-xs text-ink-50">{selectedProject.year}</span>
-                  </div>
-                  <h3 className="font-display text-display-md text-ink">{selectedProject.title}</h3>
-                </div>
-                <button
-                  ref={closeButtonRef}
-                  onClick={handleClose}
-                  onMouseEnter={() => playHover(294)}
-                  className="w-12 h-12 flex items-center justify-center bg-bg border-3 border-ink text-ink hover:bg-ink hover:text-bg transition-colors flex-shrink-0"
-                  aria-label="Cerrar detalles del proyecto"
-                >
-                  <X className="w-5 h-5" strokeWidth={3} />
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-6 md:p-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-2">Diagnóstico</h4>
-                      <p className="font-body text-base text-ink-70 leading-relaxed">{selectedProject.problem}</p>
-                    </div>
-                    <div>
-                      <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-2">Solución</h4>
-                      <p className="font-body text-base text-ink-70 leading-relaxed">{selectedProject.solution}</p>
-                    </div>
-                  </div>
-                  <div className="space-y-6">
-                    <div>
-                      <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-3">Stack Tecnológico</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedProject.technologies.map((tech) => (
-                          <Badge key={tech} variant="accent">{tech}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-3">Decisiones Técnicas</h4>
-                      <ul className="space-y-2">
-                        {selectedProject.decisions.map((decision, i) => (
-                          <li key={i} className="flex items-start gap-2 font-body text-sm text-ink-70">
-                            <span className="mt-1.5 w-1.5 h-1.5 bg-secondary flex-shrink-0" />
-                            {decision}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    {selectedProject.url && (
-                      <a
-                        href={selectedProject.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onMouseEnter={() => playHover(440)}
-                        className="inline-flex items-center gap-2 font-ui font-semibold text-sm text-ink border-3 border-ink px-5 py-3 bg-accent shadow-brutal-sm hover:shadow-brutal transition-shadow no-underline"
-                      >
-                        <ExternalLink className="w-4 h-4" strokeWidth={3} />
-                        Visitar sitio
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
+              {selectedProject.featured ? (
+                <FeaturedModalContent
+                  project={selectedProject}
+                  closeButtonRef={closeButtonRef}
+                  handleClose={handleClose}
+                  playHover={playHover}
+                />
+              ) : (
+                <StandardModalContent
+                  project={selectedProject}
+                  closeButtonRef={closeButtonRef}
+                  handleClose={handleClose}
+                  playHover={playHover}
+                />
+              )}
             </motion.div>
           </>
         )}
       </AnimatePresence>
     </section>
+  )
+}
+
+function FeaturedModalContent({
+  project,
+  closeButtonRef,
+  handleClose,
+  playHover,
+}: {
+  project: Project
+  closeButtonRef: React.RefObject<HTMLButtonElement | null>
+  handleClose: () => void
+  playHover: (freq: number) => void
+}) {
+  return (
+    <>
+      <div className="h-48 md:h-56 bg-ink overflow-hidden border-b-6 border-ink">
+        <ProjectSleeve projectId={project.id} />
+      </div>
+
+      <div className="p-6 border-b-3 border-ink flex justify-between items-start bg-accent">
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            {project.role && (
+              <Badge variant="secondary">{project.role}</Badge>
+            )}
+            <span className="w-1 h-1 bg-ink-40" />
+            <span className="font-mono text-xs text-ink-50">{project.year}</span>
+          </div>
+          <h3 className="font-display text-display-md text-ink">{project.title}</h3>
+          <div className="flex gap-1.5">
+            {project.sector.map((s) => (
+              <span key={s} className="font-mono text-[9px] font-bold uppercase tracking-wider bg-ink text-accent dark:bg-accent dark:text-bg px-1.5 py-0.5 border border-accent">
+                {s}
+              </span>
+            ))}
+          </div>
+        </div>
+        <button
+          ref={closeButtonRef}
+          onClick={handleClose}
+          onMouseEnter={() => playHover(294)}
+          className="w-12 h-12 flex items-center justify-center bg-bg border-3 border-ink text-ink hover:bg-ink hover:text-bg transition-colors flex-shrink-0"
+          aria-label="Cerrar detalles del proyecto"
+        >
+          <X className="w-5 h-5" strokeWidth={3} />
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-6 md:p-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-2">Diagnóstico</h4>
+              <p className="font-body text-base text-ink-70 leading-relaxed">{project.problem}</p>
+            </div>
+            <div>
+              <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-2">Solución</h4>
+              <p className="font-body text-base text-ink-70 leading-relaxed">{project.solution}</p>
+            </div>
+          </div>
+          <div className="space-y-6">
+            {project.impact && (
+              <div>
+                <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-2">Impacto</h4>
+                <p className="font-body text-base text-ink-70 leading-relaxed">{project.impact}</p>
+              </div>
+            )}
+            <div>
+              <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-3">Stack Tecnológico</h4>
+              <div className="flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <Badge key={tech} variant="accent">{tech}</Badge>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-3">Decisiones Técnicas</h4>
+              <ul className="space-y-2">
+                {project.decisions.map((decision, i) => (
+                  <li key={i} className="flex items-start gap-2 font-body text-sm text-ink-70">
+                    <span className="mt-1.5 w-1.5 h-1.5 bg-secondary flex-shrink-0" />
+                    {decision}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {project.url && (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={() => playHover(440)}
+                className="inline-flex items-center gap-2 font-ui font-semibold text-sm text-ink border-3 border-ink px-5 py-3 bg-accent shadow-brutal-sm hover:shadow-brutal transition-shadow no-underline"
+              >
+                <ExternalLink className="w-4 h-4" strokeWidth={3} />
+                Visitar sitio
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
+function StandardModalContent({
+  project,
+  closeButtonRef,
+  handleClose,
+  playHover,
+}: {
+  project: Project
+  closeButtonRef: React.RefObject<HTMLButtonElement | null>
+  handleClose: () => void
+  playHover: (freq: number) => void
+}) {
+  return (
+    <>
+      <div className="p-6 border-b-3 border-ink flex justify-between items-start bg-accent">
+        <div className="space-y-1">
+          <div className="flex items-center gap-3">
+            <Badge variant="default">{project.company}</Badge>
+            <span className="w-1 h-1 bg-ink-40" />
+            <span className="font-mono text-xs text-ink-50">{project.year}</span>
+          </div>
+          <h3 className="font-display text-display-md text-ink">{project.title}</h3>
+        </div>
+        <button
+          ref={closeButtonRef}
+          onClick={handleClose}
+          onMouseEnter={() => playHover(294)}
+          className="w-12 h-12 flex items-center justify-center bg-bg border-3 border-ink text-ink hover:bg-ink hover:text-bg transition-colors flex-shrink-0"
+          aria-label="Cerrar detalles del proyecto"
+        >
+          <X className="w-5 h-5" strokeWidth={3} />
+        </button>
+      </div>
+
+      <div className="flex-1 overflow-y-auto p-6 md:p-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-2">Diagnóstico</h4>
+              <p className="font-body text-base text-ink-70 leading-relaxed">{project.problem}</p>
+            </div>
+            <div>
+              <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-2">Solución</h4>
+              <p className="font-body text-base text-ink-70 leading-relaxed">{project.solution}</p>
+            </div>
+          </div>
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-3">Stack Tecnológico</h4>
+              <div className="flex flex-wrap gap-2">
+                {project.technologies.map((tech) => (
+                  <Badge key={tech} variant="accent">{tech}</Badge>
+                ))}
+              </div>
+            </div>
+            <div>
+              <h4 className="font-ui font-semibold text-xs uppercase tracking-widest text-secondary mb-3">Decisiones Técnicas</h4>
+              <ul className="space-y-2">
+                {project.decisions.map((decision, i) => (
+                  <li key={i} className="flex items-start gap-2 font-body text-sm text-ink-70">
+                    <span className="mt-1.5 w-1.5 h-1.5 bg-secondary flex-shrink-0" />
+                    {decision}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            {project.url && (
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onMouseEnter={() => playHover(440)}
+                className="inline-flex items-center gap-2 font-ui font-semibold text-sm text-ink border-3 border-ink px-5 py-3 bg-accent shadow-brutal-sm hover:shadow-brutal transition-shadow no-underline"
+              >
+                <ExternalLink className="w-4 h-4" strokeWidth={3} />
+                Visitar sitio
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </>
   )
 }

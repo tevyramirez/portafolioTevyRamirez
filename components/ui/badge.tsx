@@ -13,7 +13,7 @@ export function Badge({ children, variant = 'default', className }: BadgeProps) 
 
   const variants = {
     default: 'bg-ink text-bg',
-    accent: 'bg-accent text-ink',
+    accent: 'bg-accent text-ink dark:text-bg',
     secondary: 'bg-secondary text-bg',
   }
 
